@@ -25,24 +25,12 @@ const I_CAN_START = 0;
 const I_CAN_STOP = 1;
 const I_AM_STARTING = 2;
 
-var cskApp;
-var cskCall;
-var cskPeer;
-
 window.onload = function() {
 	console = new Console();
 	console.log('Page loaded ...');
 	videoInput = document.getElementById('videoInput');
 	videoOutput = document.getElementById('videoOutput');
 	setState(I_CAN_START);
-
-  
-  // Inititalize callstats-kurento.
-  cskApp = callstatskurento(
-    '354800856',
-    'nsjUItggwAKW:fXOd4ArfFL7crrBrtRzanSXEsS9vlvZVnpN3PGjGhRE=',
-    'MY_LOCAL_WEB_EXAMPLE_USER_ID'
-  );
 }
 
 window.onbeforeunload = function() {
@@ -81,7 +69,6 @@ function start() {
 	setState(I_AM_STARTING);
 	showSpinner(videoInput, videoOutput);
 
-  cskCall = cskApp.createConference('hello-world-' + Date.now());
 	console.log('Creating WebRtcPeer and generating local sdp offer ...');
 
     var options = {
@@ -94,13 +81,6 @@ function start() {
         if(error) return onError(error);
 
         const _webRtcPeer = this;
-console.log('WEBRTCPEER:', this);
-
-        const peer = RTCPeerConnectionInspector.wrapPeer(this);
-        const customPeer = window.customPeer = peer.peerConnection;
-
-        cskPeer = cskCall.handle(peer, 'some-remote-user-id');
-
         this.generateOffer(onOffer);
     });
 }

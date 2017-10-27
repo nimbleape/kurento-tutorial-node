@@ -182,11 +182,13 @@ function start(sessionId, ws, sdpOffer, callback) {
         if (error) {
             return callback(error);
         }
-
+console.log('kurentoClient:', kurentoClient);
         kurentoClient.create('MediaPipeline', function(error, pipeline) {
             if (error) {
                 return callback(error);
             }
+
+            console.log('MediaPipeline:', pipeline);
 
             createMediaElements(pipeline, ws, function(error, webRtcEndpoint) {
                 if (error) {
@@ -239,11 +241,60 @@ function start(sessionId, ws, sdpOffer, callback) {
     });
 }
 
+function getPropertyNames(obj) {
+  if (obj && typeof obj === 'object') {
+    const names = Object.getOwnPropertyNames(obj);
+    const proto = Object.getPrototypeOf(obj);
+
+    const protoNames = getPropertyNames(proto);
+
+    if (protoNames.length) {
+      let _protoNames = protoNames.filter((name) => names.indexOf(name) === -1);
+
+      return names.concat(_protoNames);
+    } else {
+      return names;
+    }
+  } else {
+    return [];
+  }
+}
+
+function monitorWebRtcEndpoint(endpoint) {
+  console.log('-------- Endpoint:', getPropertyNames(endpoint).sort());
+
+  endpoint.on('MediaSessionStarted', function(event) {
+    console.log('WEBRTC: MediaSessionStarted:', arguments.length, event);
+  });
+
+  endpoint.on('MediaSessionTerminated', function(event) {
+    console.log('WEBRTC: MediaSessionTerminated:', arguments.length, event);
+  });
+
+  endpoint.on('ConnectionStateChanged', function(event) {
+    console.log('WEBRTC: ConnectionStateChanged:', arguments.length, event);
+  });
+
+  endpoint.on('MediaStateChanged', function(event) {
+    console.log('WEBRTC: MediaStateChanged:', arguments.length, event);
+  });
+
+  endpoint.on('IceComponentStateChange', function(event) {
+    console.log('WEBRTC: IceComponentStateChange:', arguments.length, event.state, event);
+  });
+
+  endpoint.on('NewCandidatePairSelected', function(event) {
+    console.log('WEBRTC: NewCandidatePairSelected:', arguments.length, event);
+  });
+}
+
 function createMediaElements(pipeline, ws, callback) {
     pipeline.create('WebRtcEndpoint', function(error, webRtcEndpoint) {
         if (error) {
             return callback(error);
         }
+
+        monitorWebRtcEndpoint(webRtcEndpoint);
 
         return callback(null, webRtcEndpoint);
     });
@@ -254,6 +305,7 @@ function connectMediaElements(webRtcEndpoint, callback) {
         if (error) {
             return callback(error);
         }
+        console.log('webRtcEndpoint connected:', webRtcEndpoint);
         return callback(null);
     });
 }
