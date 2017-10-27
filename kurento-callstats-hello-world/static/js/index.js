@@ -37,8 +37,8 @@ window.onload = function() {
   
   // Inititalize callstats-kurento.
   cskApp = callstatskurento(
-    '354800856',
-    'nsjUItggwAKW:fXOd4ArfFL7crrBrtRzanSXEsS9vlvZVnpN3PGjGhRE=',
+    YOUR_CALLSTATS_APP_ID,
+    YOUR_CALLSTATS_SECRET,
     'MY_LOCAL_WEB_EXAMPLE_USER_ID'
   );
 }
