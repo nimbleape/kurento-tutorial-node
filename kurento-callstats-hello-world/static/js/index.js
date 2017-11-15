@@ -93,7 +93,7 @@ function start() {
 
         const _webRtcPeer = this;
 console.log('WEBRTCPEER:', this);
-        call.handle(this, 'some-remote-user-id');
+        call.handle(this);
 
         this.generateOffer(onOffer);
     });

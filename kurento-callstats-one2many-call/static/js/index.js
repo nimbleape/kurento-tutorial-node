@@ -187,7 +187,7 @@ function presenter() {
       webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function(error) {
         if(error) return onError(error);
 
-        conference.handle(webRtcPeer, sessionId);
+        conference.handle(webRtcPeer);
 
         this.generateOffer(onOfferPresenter);
       });
@@ -225,7 +225,7 @@ function viewer() {
       webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options, function(error) {
         if(error) return onError(error);
 
-        conference.handle(webRtcPeer, sessionId);
+        conference.handle(webRtcPeer);
 
         this.generateOffer(onOfferViewer);
       });
