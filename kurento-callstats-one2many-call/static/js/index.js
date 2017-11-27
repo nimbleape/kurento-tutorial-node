@@ -37,15 +37,15 @@ window.onload = function() {
   userIdElement = document.getElementById('userId');
   userIdElement.addEventListener('change', function() { userId = userIdElement.value; });
   userIdElement.value = userId;
-  //initCSK('user-' + Date.now());
+  initCSK();
 }
 
-function initCSK(userID) {
+function initCSK() {
 // Inititalize callstats-kurento.
   cskApp = callstatskurento(
     YOUR_CALLSTATS_APP_ID,
-    YOUR_CALLSTATS_APP_SECRET,
-    userID
+    YOUR_CALLSTATS_SECRET,
+    'user-' + userIsd
   );
 }
 
